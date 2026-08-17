@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-08-17T09:57:16.365Z",
+  "files": {
+    "README.md": {
+      "hash": "92103c63d020168ba780321ac68b7af9bae92adb",
+      "size": 2078,
+      "mtimeMs": 1786949163000
+    },
+    "frontend/compress.html": {
+      "hash": "f8eeaf0a702d44c25f7aa94ab1846c618b1381a6",
+      "size": 4631,
+      "mtimeMs": 1786960473554.8252
+    },
+    "frontend/index.html": {
+      "hash": "9fb009b2b630307d201b819120bdd91336f5b00c",
+      "size": 2655,
+      "mtimeMs": 1786960317011.881
+    },
+    "frontend/merge.html": {
+      "hash": "1ceedfe17c94dc35fedb8aaa645dcde19461757e",
+      "size": 2917,
+      "mtimeMs": 1786960329656.303
+    },
+    "frontend/rotate.html": {
+      "hash": "5463e26faf2e2ab10d43afc97ceace49bde97c43",
+      "size": 2966,
+      "mtimeMs": 1786960458899.4617
+    },
+    "frontend/split.html": {
+      "hash": "1b69a1a29d6cf25177215506df447e7630b24e22",
+      "size": 3144,
+      "mtimeMs": 1786960339126.2866
+    },
+    "frontend/js/js_compress.js": {
+      "hash": "83eace0ccff87b12b50c5f956978ef8c7085e9e5",
+      "size": 4673,
+      "mtimeMs": 1786960289670.4204
+    },
+    "frontend/js/js_rotate.js": {
+      "hash": "5836ef79509a479d6385234a1dd763be345e4227",
+      "size": 5677,
+      "mtimeMs": 1786960272355.6282
+    },
+    "frontend/js/main.js": {
+      "hash": "68ffb91fbcb292d2f3e554890db23aab05ff354c",
+      "size": 1834,
+      "mtimeMs": 1786960305406.7395
+    },
+    "frontend/js/merge.js": {
+      "hash": "1afa680edba843d74be744b039b29e3dc9924784",
+      "size": 6046,
+      "mtimeMs": 1786953445785.9739
+    },
+    "frontend/js/split.js": {
+      "hash": "141572e78c13798d65851b932497d659dfd9b67d",
+      "size": 7561,
+      "mtimeMs": 1786953467205.3418
+    },
+    "frontend/css/style.css": {
+      "hash": "a97bcb2cee7d7dd9a9bcdd5c2b7943be601d9d0b",
+      "size": 22718,
+      "mtimeMs": 1786960231795.0928
+    },
+    "backend/package.json": {
+      "hash": "c97a38b4326fa559bd164744cbd15779924d25dd",
+      "size": 396,
+      "mtimeMs": 1786960222434.1707
+    },
+    "backend/server.js": {
+      "hash": "a8a3658c1eed33720456da9710c2fcc710c15fe5",
+      "size": 783,
+      "mtimeMs": 1786960433799.3215
+    },
+    "backend/uploads/.gitkeep": {
+      "hash": "a0b3286e84dfda5b3cd947095f83957e860d49dc",
+      "size": 57,
+      "mtimeMs": 1786949164000
+    },
+    "backend/routes/merge.js": {
+      "hash": "5fbeb00e611798648862aa2d56d58d26942d57a8",
+      "size": 1903,
+      "mtimeMs": 1786949181000
+    },
+    "backend/routes/routes_compress.js": {
+      "hash": "c88080d2308be064e6d2ce7bee0d122c3808867e",
+      "size": 4135,
+      "mtimeMs": 1786960187422.504
+    },
+    "backend/routes/routes_rotate.js": {
+      "hash": "36e2824d361d96750ea857fdbfd512bac8337569",
+      "size": 1872,
+      "mtimeMs": 1786960180340.9324
+    },
+    "backend/routes/split.js": {
+      "hash": "e7f45355650daeb2831bfd4f5fbbf0b08b73ffb5",
+      "size": 3628,
+      "mtimeMs": 1786951787000
+    }
+  }
+}

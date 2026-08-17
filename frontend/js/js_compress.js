@@ -1,4 +1,4 @@
-// Compress PDF — choose level, upload, show size comparison
+// Compress PDF — choose level (or custom target size), upload, show size comparison
 
 const API_BASE = "https://pdfdesk.onrender.com";
 
@@ -12,11 +12,16 @@ const savingsText = document.getElementById("savingsText");
 const barFill = document.getElementById("barFill");
 const origSizeText = document.getElementById("origSizeText");
 const newSizeText = document.getElementById("newSizeText");
+const targetRow = document.getElementById("targetRow");
+const targetSizeText = document.getElementById("targetSizeText");
 const compressControls = document.getElementById("compressControls");
 const fileInput = document.getElementById("fileInput");
 const selectBtn = document.getElementById("selectBtn");
 const compressBtn = document.getElementById("compressBtn");
 const statusEl = document.getElementById("status");
+const customSizeGroup = document.getElementById("customSizeGroup");
+const customSizeInput = document.getElementById("customSizeInput");
+const customSizeUnit = document.getElementById("customSizeUnit");
 
 let selectedFile = null;
 let resultBlob = null;
@@ -34,6 +39,7 @@ function formatBytes(bytes) {
 
 function resetResult() {
   resultCard.hidden = true;
+  targetRow.hidden = true;
   resultBlob = null;
   compressBtn.textContent = "Compress PDF →";
 }
@@ -85,6 +91,20 @@ dropzone.addEventListener("drop", (e) => {
   if (f) selectFile(f);
 });
 
+// Show/hide the custom size input based on which radio is selected
+document.querySelectorAll('input[name="level"]').forEach((radio) => {
+  radio.addEventListener("change", () => {
+    customSizeGroup.hidden = radio.value !== "custom" || !radio.checked;
+  });
+});
+
+function getTargetBytes() {
+  const value = parseFloat(customSizeInput.value);
+  if (!value || value <= 0) return null;
+  const unit = customSizeUnit.value;
+  return unit === "MB" ? Math.round(value * 1024 * 1024) : Math.round(value * 1024);
+}
+
 compressBtn.addEventListener("click", async () => {
   if (!selectedFile) return;
 
@@ -102,6 +122,19 @@ compressBtn.addEventListener("click", async () => {
   }
 
   const level = document.querySelector('input[name="level"]:checked')?.value || "medium";
+  let targetBytes = null;
+
+  if (level === "custom") {
+    targetBytes = getTargetBytes();
+    if (!targetBytes) {
+      showStatus("Enter a valid target size.", "error");
+      return;
+    }
+    if (targetBytes >= selectedFile.size) {
+      showStatus("Target size must be smaller than the original file.", "error");
+      return;
+    }
+  }
 
   compressBtn.disabled = true;
   showStatus("Compressing PDF... please wait");
@@ -110,6 +143,9 @@ compressBtn.addEventListener("click", async () => {
     const formData = new FormData();
     formData.append("file", selectedFile);
     formData.append("level", level);
+    if (level === "custom") {
+      formData.append("targetSize", String(targetBytes));
+    }
 
     const res = await fetch(`${API_BASE}/api/compress`, {
       method: "POST",
@@ -123,6 +159,7 @@ compressBtn.addEventListener("click", async () => {
 
     const originalSize = Number(res.headers.get("X-Original-Size")) || selectedFile.size;
     const compressedSize = Number(res.headers.get("X-Compressed-Size")) || 0;
+    const achievedTarget = res.headers.get("X-Achieved-Target");
 
     resultBlob = await res.blob();
 
@@ -134,10 +171,23 @@ compressBtn.addEventListener("click", async () => {
     newSizeText.textContent = formatBytes(compressedSize || resultBlob.size);
     savingsText.innerHTML = `${savedPct}% <span>smaller</span>`;
     barFill.style.width = `${100 - savedPct}%`;
-    resultCard.hidden = false;
 
+    if (level === "custom" && targetBytes) {
+      targetRow.hidden = false;
+      targetSizeText.textContent = formatBytes(targetBytes);
+    }
+
+    resultCard.hidden = false;
     compressBtn.textContent = "Download Compressed PDF →";
-    showStatus("Done!", "success");
+
+    if (level === "custom" && achievedTarget === "false") {
+      showStatus(
+        "Couldn't shrink all the way to your target — this is the smallest we could get without ruining quality.",
+        "error"
+      );
+    } else {
+      showStatus("Done!", "success");
+    }
   } catch (err) {
     console.error(err);
     showStatus(err.message || "Something went wrong.", "error");

@@ -1,0 +1,224 @@
+[
+  {
+    "type": "file",
+    "label": "frontend/js/js_compress.js",
+    "file": "frontend/js/js_compress.js",
+    "detail": "Defines 5 function(s) implementing supporting logic."
+  },
+  {
+    "type": "function",
+    "label": "showStatus",
+    "file": "frontend/js/js_compress.js",
+    "detail": "(msg, type = \"\")"
+  },
+  {
+    "type": "function",
+    "label": "formatBytes",
+    "file": "frontend/js/js_compress.js",
+    "detail": "(bytes)"
+  },
+  {
+    "type": "function",
+    "label": "resetResult",
+    "file": "frontend/js/js_compress.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "updateUI",
+    "file": "frontend/js/js_compress.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "selectFile",
+    "file": "frontend/js/js_compress.js",
+    "detail": "(file)"
+  },
+  {
+    "type": "file",
+    "label": "frontend/js/js_rotate.js",
+    "file": "frontend/js/js_rotate.js",
+    "detail": "Defines 5 function(s) implementing supporting logic."
+  },
+  {
+    "type": "function",
+    "label": "showStatus",
+    "file": "frontend/js/js_rotate.js",
+    "detail": "(msg, type = \"\")"
+  },
+  {
+    "type": "function",
+    "label": "normalize",
+    "file": "frontend/js/js_rotate.js",
+    "detail": "(angle)"
+  },
+  {
+    "type": "function",
+    "label": "updateUI",
+    "file": "frontend/js/js_rotate.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "renderGrid",
+    "file": "frontend/js/js_rotate.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "loadPdf",
+    "file": "frontend/js/js_rotate.js",
+    "detail": "(file)"
+  },
+  {
+    "type": "file",
+    "label": "frontend/js/main.js",
+    "file": "frontend/js/main.js",
+    "detail": "Supporting source file."
+  },
+  {
+    "type": "file",
+    "label": "frontend/js/merge.js",
+    "file": "frontend/js/merge.js",
+    "detail": "Defines 6 function(s) implementing supporting logic."
+  },
+  {
+    "type": "function",
+    "label": "showStatus",
+    "file": "frontend/js/merge.js",
+    "detail": "(msg, type = \"\")"
+  },
+  {
+    "type": "function",
+    "label": "updateUI",
+    "file": "frontend/js/merge.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "renderPdfThumb",
+    "file": "frontend/js/merge.js",
+    "detail": "(file)"
+  },
+  {
+    "type": "function",
+    "label": "renderThumbs",
+    "file": "frontend/js/merge.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "addFiles",
+    "file": "frontend/js/merge.js",
+    "detail": "(fileListRaw)"
+  },
+  {
+    "type": "function",
+    "label": "generateThumbs",
+    "file": "frontend/js/merge.js",
+    "detail": "()"
+  },
+  {
+    "type": "file",
+    "label": "frontend/js/split.js",
+    "file": "frontend/js/split.js",
+    "detail": "Defines 5 function(s) implementing supporting logic."
+  },
+  {
+    "type": "function",
+    "label": "showStatus",
+    "file": "frontend/js/split.js",
+    "detail": "(msg, type = \"\")"
+  },
+  {
+    "type": "function",
+    "label": "updateUI",
+    "file": "frontend/js/split.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "renderRangeInputs",
+    "file": "frontend/js/split.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "renderRangeCards",
+    "file": "frontend/js/split.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "loadPdf",
+    "file": "frontend/js/split.js",
+    "detail": "(file)"
+  },
+  {
+    "type": "file",
+    "label": "backend/package.json",
+    "file": "backend/package.json",
+    "detail": "Supporting source file."
+  },
+  {
+    "type": "file",
+    "label": "backend/server.js",
+    "file": "backend/server.js",
+    "detail": "Defines HTTP route handlers (controller/router layer)."
+  },
+  {
+    "type": "file",
+    "label": "backend/routes/merge.js",
+    "file": "backend/routes/merge.js",
+    "detail": "Defines HTTP route handlers (controller/router layer)."
+  },
+  {
+    "type": "file",
+    "label": "backend/routes/routes_compress.js",
+    "file": "backend/routes/routes_compress.js",
+    "detail": "Defines HTTP route handlers (controller/router layer)."
+  },
+  {
+    "type": "file",
+    "label": "backend/routes/routes_rotate.js",
+    "file": "backend/routes/routes_rotate.js",
+    "detail": "Defines HTTP route handlers (controller/router layer)."
+  },
+  {
+    "type": "file",
+    "label": "backend/routes/split.js",
+    "file": "backend/routes/split.js",
+    "detail": "Defines HTTP route handlers (controller/router layer)."
+  },
+  {
+    "type": "route",
+    "label": "GET /",
+    "file": "backend/server.js",
+    "detail": "public"
+  },
+  {
+    "type": "route",
+    "label": "POST /",
+    "file": "backend/routes/merge.js",
+    "detail": "public"
+  },
+  {
+    "type": "route",
+    "label": "POST /",
+    "file": "backend/routes/routes_compress.js",
+    "detail": "public"
+  },
+  {
+    "type": "route",
+    "label": "POST /",
+    "file": "backend/routes/routes_rotate.js",
+    "detail": "public"
+  },
+  {
+    "type": "route",
+    "label": "POST /",
+    "file": "backend/routes/split.js",
+    "detail": "public"
+  }
+]
