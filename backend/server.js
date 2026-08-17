@@ -20,7 +20,7 @@ app.use("/api/merge", require("./routes/merge"));
 app.use("/api/split", require("./routes/split"));
 app.use("/api/rotate", require("./routes/routes_rotate"));
 app.use("/api/compress", require("./routes/routes_compress"));
-app.use("/api/edit", require("./routes/edit"));
+app.use("/api/edit", require("./routes/edit-route"));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
