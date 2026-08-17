@@ -137,7 +137,8 @@ compressBtn.addEventListener("click", async () => {
   }
 
   compressBtn.disabled = true;
-  showStatus("Compressing PDF... please wait");
+  showStatus("");
+  PDFDeskOverlay.show("Compressing PDF");
 
   try {
     const formData = new FormData();
@@ -147,10 +148,7 @@ compressBtn.addEventListener("click", async () => {
       formData.append("targetSize", String(targetBytes));
     }
 
-    const res = await fetch(`${API_BASE}/api/compress`, {
-      method: "POST",
-      body: formData
-    });
+    const res = await PDFDeskOverlay.upload(`${API_BASE}/api/compress`, formData);
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
@@ -198,5 +196,6 @@ compressBtn.addEventListener("click", async () => {
     showStatus(err.message || "Something went wrong.", "error");
   } finally {
     compressBtn.disabled = false;
+    PDFDeskOverlay.hide();
   }
 });

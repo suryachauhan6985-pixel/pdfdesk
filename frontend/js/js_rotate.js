@@ -148,17 +148,15 @@ rotateBtn.addEventListener("click", async () => {
   if (!selectedFile) return;
 
   rotateBtn.disabled = true;
-  showStatus("Rotating PDF... please wait");
+  showStatus("");
+  PDFDeskOverlay.show("Rotating PDF");
 
   try {
     const formData = new FormData();
     formData.append("file", selectedFile);
     formData.append("rotations", JSON.stringify(rotations));
 
-    const res = await fetch(`${API_BASE}/api/rotate`, {
-      method: "POST",
-      body: formData
-    });
+    const res = await PDFDeskOverlay.upload(`${API_BASE}/api/rotate`, formData);
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
@@ -181,5 +179,6 @@ rotateBtn.addEventListener("click", async () => {
     showStatus(err.message || "Something went wrong.", "error");
   } finally {
     rotateBtn.disabled = false;
+    PDFDeskOverlay.hide();
   }
 });
