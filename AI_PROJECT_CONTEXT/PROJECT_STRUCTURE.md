@@ -12,6 +12,7 @@ backend/
         split.js
     uploads/
         .gitkeep
+    Dockerfile
     package.json
     server.js
 frontend/
@@ -22,6 +23,7 @@ frontend/
         js_rotate.js
         main.js
         merge.js
+        overlay.js
         split.js
     compress.html
     index.html

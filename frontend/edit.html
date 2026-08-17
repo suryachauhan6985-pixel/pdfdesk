@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit PDF — PDFDesk</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <a href="index.html" class="sidebar-logo">PDF<span>Desk</span></a>
+      <nav class="sidebar-nav">
+        <a href="index.html" class="sidebar-link"><span class="sidebar-icon">🏠</span> Home</a>
+        <a href="merge.html" class="sidebar-link"><span class="sidebar-icon">🧩</span> Merge PDF</a>
+        <a href="split.html" class="sidebar-link"><span class="sidebar-icon">✂️</span> Split PDF</a>
+        <a href="compress.html" class="sidebar-link"><span class="sidebar-icon">🗜️</span> Compress</a>
+        <a href="rotate.html" class="sidebar-link"><span class="sidebar-icon">🔄</span> Rotate</a>
+        <a href="edit.html" class="sidebar-link active"><span class="sidebar-icon">📝</span> Edit PDF</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">🖼️</span> PDF to JPG</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">📄</span> JPG to PDF</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">💧</span> Watermark</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">🔒</span> Protect</a>
+      </nav>
+      <div class="sidebar-footer"><span class="stage-badge">Live</span></div>
+    </aside>
+
+    <div class="edit-layout page-enter">
+      <!-- Empty state (before a file is loaded) -->
+      <section class="merge-main" id="editEmptyWrap">
+        <div class="dropzone-big" id="dropzone">
+          <div class="dropzone-content">
+            <div class="edit-empty-icon">📝</div>
+            <h2>Select a PDF to edit</h2>
+            <p>or drag and drop a PDF here</p>
+            <button class="btn btn-primary btn-lg" id="selectBtn">Select PDF file</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Editor (shown once a file is loaded) -->
+      <div id="editorWrap" hidden style="display:flex; flex-direction:column; flex:1; min-height:0;">
+        <!-- Toolbar -->
+        <div class="edit-toolbar">
+          <button class="edit-tool-btn active" data-tool="select" title="Drag / Select">✋</button>
+          <button class="edit-tool-btn" data-tool="text" title="Add text">🅰️</button>
+          <button class="edit-tool-btn" data-tool="image" title="Add image">🖼️</button>
+          <button class="edit-tool-btn" data-tool="draw" title="Draw">✏️</button>
+          <button class="edit-tool-btn" data-tool="shape" title="Add shape">▭</button>
+          <button class="edit-tool-btn" id="deleteSelectedBtn" title="Delete selected">🗑️</button>
+
+          <div class="edit-toolbar-options" id="textOptions" hidden>
+            <label>Color <input type="color" id="textColor" value="#e11d48" /></label>
+            <label>Size <input type="range" id="textSize" min="10" max="72" value="18" /></label>
+          </div>
+          <div class="edit-toolbar-options" id="drawOptions" hidden>
+            <label>Color <input type="color" id="drawColor" value="#e11d48" /></label>
+            <label>Width <input type="range" id="drawWidth" min="1" max="16" value="3" /></label>
+          </div>
+          <div class="edit-toolbar-options" id="shapeOptions" hidden>
+            <label>Color <input type="color" id="shapeColor" value="#e11d48" /></label>
+            <label>Width <input type="range" id="shapeWidth" min="1" max="10" value="2" /></label>
+          </div>
+        </div>
+
+        <div class="edit-body">
+          <!-- Page thumbnails -->
+          <div class="edit-thumb-rail" id="thumbRail"></div>
+
+          <!-- Page stage -->
+          <div class="edit-stage-wrap">
+            <div class="edit-stage tool-select" id="stage">
+              <canvas id="pageCanvas"></canvas>
+              <!-- overlay elements (text/image/shape) injected here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="merge-side" id="editSide">
+        <h1>Edit PDF</h1>
+        <p class="side-desc">Add text, images, shapes or freehand drawing to your PDF, then save.</p>
+        <div class="edit-side-hint">Pick a tool from the toolbar, click on the page to place it. Use the drag tool to move, resize or delete elements.</div>
+
+        <div class="side-status" id="status"></div>
+        <button class="btn btn-primary btn-merge" id="saveBtn" disabled>Save changes →</button>
+      </aside>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept="application/pdf" hidden />
+  <input type="file" id="imageInput" accept="image/png,image/jpeg" hidden />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="js/overlay.js"></script>
+  <script src="js/js_edit.js"></script>
+</body>
+</html>

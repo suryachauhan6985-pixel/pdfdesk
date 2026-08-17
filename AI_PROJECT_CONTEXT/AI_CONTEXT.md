@@ -10,13 +10,13 @@
 - **Root path:** `C:\Users\Administrator\Desktop\pdfdesk`
 - **Name:** Unknown
 - **Description:** Not specified in package.json
-- **Generated:** 2026-08-17T10:31:43.120Z
+- **Generated:** 2026-08-17T11:21:58.705Z
 
 ## 2. Architecture Overview
 
 - **Detected technologies:** HTML (markup), JavaScript (language), CSS (styling)
-- **Total files (post-ignore):** 19
-- **Deeply analyzed files:** 11
+- **Total files (post-ignore):** 21
+- **Deeply analyzed files:** 13
 - **Typical request flow (heuristic):** Browser → Routes → Controller → Service → Database
 
 ## 3. Folder Structure
@@ -30,6 +30,7 @@ backend/
         split.js
     uploads/
         .gitkeep
+    Dockerfile
     package.json
     server.js
 frontend/
@@ -40,6 +41,7 @@ frontend/
         js_rotate.js
         main.js
         merge.js
+        overlay.js
         split.js
     compress.html
     index.html
@@ -53,6 +55,7 @@ README.md
 
 - `frontend/js/js_compress.js` — Defines 6 function(s) implementing supporting logic.
 - `frontend/js/merge.js` — Defines 6 function(s) implementing supporting logic.
+- `backend/Dockerfile` — Supporting source file.
 - `backend/server.js` — Defines HTTP route handlers (controller/router layer).
 - `backend/routes/merge.js` — Defines HTTP route handlers (controller/router layer).
 - `backend/routes/routes_compress.js` — Defines HTTP route handlers (controller/router layer).
@@ -84,12 +87,11 @@ Utility/helper files: 0
 
 - Project appears to be plain JavaScript (no TypeScript detected).
 - File naming leans camelCase.
-- 5 of 11 analyzed files define at least one function.
+- 6 of 13 analyzed files define at least one function.
 
 ## 11. Known Issues / Risk Areas
 
-- 1 file(s) flagged as High complexity: backend/routes/routes_compress.js
-- Raw SQL string usage found in 3 file(s) — verify parameterization to avoid SQL injection.
+- Raw SQL string usage found in 4 file(s) — verify parameterization to avoid SQL injection.
 - No routes appear to use recognizable auth middleware — verify whether this API is intentionally public.
 
 ## 12. Suggested Future Improvements
@@ -97,11 +99,13 @@ Utility/helper files: 0
 - frontend/js/js_compress.js: Raw SQL strings detected — verify parameterized queries are used to prevent SQL injection.
 - frontend/js/main.js: No functions or classes detected — file may be mostly configuration or could benefit from clearer structure.
 - frontend/js/merge.js: Raw SQL strings detected — verify parameterized queries are used to prevent SQL injection.
+- backend/Dockerfile: Raw SQL strings detected — verify parameterized queries are used to prevent SQL injection.
+- backend/Dockerfile: No functions or classes detected — file may be mostly configuration or could benefit from clearer structure.
 - backend/server.js: process.env is used directly — confirm environment variables are validated/typed at startup.
 - backend/server.js: No functions or classes detected — file may be mostly configuration or could benefit from clearer structure.
 - backend/routes/merge.js: No functions or classes detected — file may be mostly configuration or could benefit from clearer structure.
-- backend/routes/routes_compress.js: High branching complexity detected — consider refactoring conditional logic into smaller helpers.
 - backend/routes/routes_compress.js: Raw SQL strings detected — verify parameterized queries are used to prevent SQL injection.
+- backend/routes/routes_compress.js: process.env is used directly — confirm environment variables are validated/typed at startup.
 - backend/routes/routes_rotate.js: No functions or classes detected — file may be mostly configuration or could benefit from clearer structure.
 - backend/routes/split.js: No functions or classes detected — file may be mostly configuration or could benefit from clearer structure.
 

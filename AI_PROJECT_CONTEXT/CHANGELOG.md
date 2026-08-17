@@ -1,9 +1,9 @@
 # Changelog (Since Last Scan)
 
-Scan performed: 2026-08-17T10:31:43.120Z
+Scan performed: 2026-08-17T11:21:58.705Z
 First scan for this project: Yes
 
-## Added Files (19)
+## Added Files (21)
 
 - README.md
 - frontend/compress.html
@@ -15,8 +15,10 @@ First scan for this project: Yes
 - frontend/js/js_rotate.js
 - frontend/js/main.js
 - frontend/js/merge.js
+- frontend/js/overlay.js
 - frontend/js/split.js
 - frontend/css/style.css
+- backend/Dockerfile
 - backend/package.json
 - backend/server.js
 - backend/uploads/.gitkeep

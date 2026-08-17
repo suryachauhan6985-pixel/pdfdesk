@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-17T10:31:43.124Z",
+  "generatedAt": "2026-08-17T11:21:58.709Z",
   "files": {
     "README.md": {
       "hash": "92103c63d020168ba780321ac68b7af9bae92adb",
@@ -7,9 +7,9 @@
       "mtimeMs": 1786949163000
     },
     "frontend/compress.html": {
-      "hash": "172b141dc2638a4cca5977c0891f529d2347a95a",
-      "size": 5993,
-      "mtimeMs": 1786961322445.833
+      "hash": "41338d65ecf8d7a4750ed62d1f50c3839e6e611e",
+      "size": 6034,
+      "mtimeMs": 1786964871240.9802
     },
     "frontend/index.html": {
       "hash": "9fb009b2b630307d201b819120bdd91336f5b00c",
@@ -32,14 +32,14 @@
       "mtimeMs": 1786960339126.2866
     },
     "frontend/js/js_compress.js": {
-      "hash": "fe1dbac3a7d7438da20b2953c487298ea29c7ac9",
-      "size": 7470,
-      "mtimeMs": 1786962299903.221
+      "hash": "c7921bd1897daa0e533a184571bc473e74c756a0",
+      "size": 6678,
+      "mtimeMs": 1786965158267.588
     },
     "frontend/js/js_rotate.js": {
-      "hash": "5836ef79509a479d6385234a1dd763be345e4227",
-      "size": 5677,
-      "mtimeMs": 1786960272355.6282
+      "hash": "decfafed9c0050a03df6045051f8d89c41aa0ac4",
+      "size": 5692,
+      "mtimeMs": 1786965177856.868
     },
     "frontend/js/main.js": {
       "hash": "68ffb91fbcb292d2f3e554890db23aab05ff354c",
@@ -47,19 +47,29 @@
       "mtimeMs": 1786960305406.7395
     },
     "frontend/js/merge.js": {
-      "hash": "1afa680edba843d74be744b039b29e3dc9924784",
-      "size": 6046,
-      "mtimeMs": 1786953445785.9739
+      "hash": "427e18a54d7d4e4cc4a49b791549ed7b5477ccd9",
+      "size": 6061,
+      "mtimeMs": 1786965165405.9812
+    },
+    "frontend/js/overlay.js": {
+      "hash": "04108b23685d7cf783c351ca9ec2ac5ac8859ce1",
+      "size": 5560,
+      "mtimeMs": 1786965152708.7393
     },
     "frontend/js/split.js": {
-      "hash": "141572e78c13798d65851b932497d659dfd9b67d",
-      "size": 7561,
-      "mtimeMs": 1786953467205.3418
+      "hash": "b856bbeb2160808fa8c5bc2a1dbd62d8c90d45be",
+      "size": 7576,
+      "mtimeMs": 1786965171986.8
     },
     "frontend/css/style.css": {
-      "hash": "a97bcb2cee7d7dd9a9bcdd5c2b7943be601d9d0b",
-      "size": 22718,
-      "mtimeMs": 1786960231795.0928
+      "hash": "1c89eefc93eec0782eb083425bf9a974b34cfc44",
+      "size": 24460,
+      "mtimeMs": 1786964861219.7754
+    },
+    "backend/Dockerfile": {
+      "hash": "29c92f6b741582f1b8ef5b9f9010c1b9e0bbde09",
+      "size": 588,
+      "mtimeMs": 1786963976114.72
     },
     "backend/package.json": {
       "hash": "c97a38b4326fa559bd164744cbd15779924d25dd",
@@ -79,12 +89,12 @@
     "backend/routes/merge.js": {
       "hash": "5fbeb00e611798648862aa2d56d58d26942d57a8",
       "size": 1903,
-      "mtimeMs": 1786949181000
+      "mtimeMs": 1786964907132.848
     },
     "backend/routes/routes_compress.js": {
-      "hash": "9914da557cd09d0dd3d8cbf75db4e08b56a0957a",
-      "size": 16197,
-      "mtimeMs": 1786962292549.5981
+      "hash": "273d6aa3c9cfdc3a58d454bb9f6499e12c357808",
+      "size": 6919,
+      "mtimeMs": 1786963110318.5288
     },
     "backend/routes/routes_rotate.js": {
       "hash": "36e2824d361d96750ea857fdbfd512bac8337569",

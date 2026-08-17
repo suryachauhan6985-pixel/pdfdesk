@@ -127,6 +127,48 @@
   },
   {
     "type": "file",
+    "label": "frontend/js/overlay.js",
+    "file": "frontend/js/overlay.js",
+    "detail": "Defines 6 function(s) implementing supporting logic."
+  },
+  {
+    "type": "function",
+    "label": "ensureBuilt",
+    "file": "frontend/js/overlay.js",
+    "detail": "()"
+  },
+  {
+    "type": "function",
+    "label": "show",
+    "file": "frontend/js/overlay.js",
+    "detail": "(title)"
+  },
+  {
+    "type": "function",
+    "label": "setProgress",
+    "file": "frontend/js/overlay.js",
+    "detail": "(percent, sub)"
+  },
+  {
+    "type": "function",
+    "label": "hide",
+    "file": "frontend/js/overlay.js",
+    "detail": "(delayMs)"
+  },
+  {
+    "type": "function",
+    "label": "upload",
+    "file": "frontend/js/overlay.js",
+    "detail": "(url, formData)"
+  },
+  {
+    "type": "function",
+    "label": "startSimulated",
+    "file": "frontend/js/overlay.js",
+    "detail": "()"
+  },
+  {
+    "type": "file",
     "label": "frontend/js/split.js",
     "file": "frontend/js/split.js",
     "detail": "Defines 5 function(s) implementing supporting logic."
@@ -163,6 +205,12 @@
   },
   {
     "type": "file",
+    "label": "backend/Dockerfile",
+    "file": "backend/Dockerfile",
+    "detail": "Supporting source file."
+  },
+  {
+    "type": "file",
     "label": "backend/package.json",
     "file": "backend/package.json",
     "detail": "Supporting source file."
@@ -187,39 +235,21 @@
   },
   {
     "type": "function",
-    "label": "resizeRGBA",
+    "label": "runGhostscript",
     "file": "backend/routes/routes_compress.js",
-    "detail": "(data, width, height, scale)"
+    "detail": "(inputPath, outputPath, combo)"
   },
   {
     "type": "function",
-    "label": "resolve",
+    "label": "tmpPath",
     "file": "backend/routes/routes_compress.js",
-    "detail": "(context, obj)"
+    "detail": "(ext)"
   },
   {
     "type": "function",
-    "label": "getComponentCount",
+    "label": "compressOnce",
     "file": "backend/routes/routes_compress.js",
-    "detail": "(context, csEntry)"
-  },
-  {
-    "type": "function",
-    "label": "decodeFlateImage",
-    "file": "backend/routes/routes_compress.js",
-    "detail": "(context, dict, rawBytes)"
-  },
-  {
-    "type": "function",
-    "label": "prepareDoc",
-    "file": "backend/routes/routes_compress.js",
-    "detail": "(srcBytes)"
-  },
-  {
-    "type": "function",
-    "label": "buildOutput",
-    "file": "backend/routes/routes_compress.js",
-    "detail": "(pdfDoc, context, images, combo)"
+    "detail": "(inputPath, combo)"
   },
   {
     "type": "file",

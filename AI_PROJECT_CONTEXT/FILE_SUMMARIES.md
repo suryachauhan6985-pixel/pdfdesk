@@ -5,8 +5,8 @@ Deep analysis of every important source file.
 ## `frontend/js/js_compress.js`
 
 - **Purpose:** Defines 6 function(s) implementing supporting logic.
-- **Lines of code:** 215
-- **Complexity:** Medium (heuristic score: 34)
+- **Lines of code:** 201
+- **Complexity:** Medium (heuristic score: 31)
 - **Imports:** None
 - **Exports:** None
 - **Functions:** showStatus(msg, type = ""), formatBytes(bytes), resetResult(), updateUI(), selectFile(file), getTargetBytes()
@@ -22,7 +22,7 @@ Deep analysis of every important source file.
 ## `frontend/js/js_rotate.js`
 
 - **Purpose:** Defines 5 function(s) implementing supporting logic.
-- **Lines of code:** 185
+- **Lines of code:** 184
 - **Complexity:** Medium (heuristic score: 21)
 - **Imports:** None
 - **Exports:** None
@@ -54,7 +54,7 @@ Deep analysis of every important source file.
 ## `frontend/js/merge.js`
 
 - **Purpose:** Defines 6 function(s) implementing supporting logic.
-- **Lines of code:** 207
+- **Lines of code:** 205
 - **Complexity:** Medium (heuristic score: 24)
 - **Imports:** None
 - **Exports:** None
@@ -68,10 +68,25 @@ Deep analysis of every important source file.
 
 ---
 
+## `frontend/js/overlay.js`
+
+- **Purpose:** Defines 6 function(s) implementing supporting logic.
+- **Lines of code:** 157
+- **Complexity:** Medium (heuristic score: 21)
+- **Imports:** None
+- **Exports:** None
+- **Functions:** ensureBuilt(), show(title), setProgress(percent, sub), hide(delayMs), upload(url, formData), startSimulated()
+- **Classes:** None
+- **API endpoints:** None
+- **Database usage:** None
+- **Environment variables used:** None
+
+---
+
 ## `frontend/js/split.js`
 
 - **Purpose:** Defines 5 function(s) implementing supporting logic.
-- **Lines of code:** 245
+- **Lines of code:** 243
 - **Complexity:** Medium (heuristic score: 25)
 - **Imports:** None
 - **Exports:** None
@@ -80,6 +95,24 @@ Deep analysis of every important source file.
 - **API endpoints:** None
 - **Database usage:** None
 - **Environment variables used:** None
+
+---
+
+## `backend/Dockerfile`
+
+- **Purpose:** Supporting source file.
+- **Lines of code:** 21
+- **Complexity:** Low (heuristic score: 0)
+- **Imports:** None
+- **Exports:** None
+- **Functions:** None
+- **Classes:** None
+- **API endpoints:** None
+- **Database usage:** Raw SQL detected (1 statement keyword: UPDATE)
+- **Environment variables used:** None
+- **Potential improvements:**
+  - Raw SQL strings detected — verify parameterized queries are used to prevent SQL injection.
+  - No functions or classes detected — file may be mostly configuration or could benefit from clearer structure.
 
 ---
 
@@ -136,18 +169,18 @@ Deep analysis of every important source file.
 ## `backend/routes/routes_compress.js`
 
 - **Purpose:** Defines HTTP route handlers (controller/router layer).
-- **Lines of code:** 426
-- **Complexity:** High (heuristic score: 64)
-- **Imports:** express, multer, pdf-lib, jpeg-js
+- **Lines of code:** 218
+- **Complexity:** Medium (heuristic score: 21)
+- **Imports:** express, multer, child_process, fs/promises, os, path, crypto
 - **Exports:** module.exports
-- **Functions:** resizeRGBA(data, width, height, scale), resolve(context, obj), getComponentCount(context, csEntry), decodeFlateImage(context, dict, rawBytes), prepareDoc(srcBytes), buildOutput(pdfDoc, context, images, combo)
+- **Functions:** runGhostscript(inputPath, outputPath, combo), tmpPath(ext), compressOnce(inputPath, combo)
 - **Classes:** None
 - **API endpoints:** POST /
 - **Database usage:** Raw SQL detected (1 statement keyword: JOIN)
-- **Environment variables used:** None
+- **Environment variables used:** GS_BIN
 - **Potential improvements:**
-  - High branching complexity detected — consider refactoring conditional logic into smaller helpers.
   - Raw SQL strings detected — verify parameterized queries are used to prevent SQL injection.
+  - process.env is used directly — confirm environment variables are validated/typed at startup.
 
 ---
 
