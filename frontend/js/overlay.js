@@ -51,16 +51,24 @@
     }
   }
 
-  function hide() {
+  function hide(delayMs) {
     if (!overlayEl) return;
-    overlayEl.classList.remove("open");
+    if (delayMs) {
+      setTimeout(() => overlayEl.classList.remove("open"), delayMs);
+    } else {
+      overlayEl.classList.remove("open");
+    }
   }
 
   /**
    * POSTs formData to url via XMLHttpRequest (so real upload-progress events
    * are available, unlike fetch), driving the overlay's progress bar:
-   *   0–70%   = actual upload progress (accurate, byte-based)
-   *   70–100% = indeterminate while the server processes, then snaps to 100%
+   *   0–35%   = actual upload progress (accurate, byte-based)
+   *   35–92%  = simulated progress that decelerates as it approaches 92%
+   *             (server processing has no real progress signal, so this
+   *             mimics the "almost there" feel of sites like iLovePDF
+   *             instead of a plain indeterminate stripe)
+   *   92–100% = snaps to 100% the instant the real response arrives
    * Resolves with an object shaped like a fetch() Response (ok, status,
    * headers.get(), blob(), json()) so existing call sites barely change.
    */
@@ -70,16 +78,35 @@
       xhr.open("POST", url);
       xhr.responseType = "blob";
 
+      let current = 0;
+      let simTimer = null;
+
+      const startSimulated = () => {
+        clearInterval(simTimer);
+        subEl && (subEl.textContent = "Processing on server…");
+        simTimer = setInterval(() => {
+          // Decelerating approach to 92% — bigger steps early, tiny steps late.
+          const remaining = 92 - current;
+          const step = Math.max(0.15, remaining * 0.045);
+          current = Math.min(92, current + step);
+          setProgress(current);
+        }, 220);
+      };
+
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) {
-          setProgress((e.loaded / e.total) * 70, "Uploading…");
+          current = (e.loaded / e.total) * 35;
+          setProgress(current, "Uploading…");
         }
       };
       xhr.upload.onload = () => {
-        setProgress(null, "Processing on server…");
+        current = 35;
+        setProgress(current);
+        startSimulated();
       };
 
       xhr.onload = () => {
+        clearInterval(simTimer);
         setProgress(100, "Done");
         const headerMap = {};
         xhr
@@ -113,8 +140,14 @@
         });
       };
 
-      xhr.onerror = () => reject(new Error("Network error — please check your connection."));
-      xhr.ontimeout = () => reject(new Error("Request timed out."));
+      xhr.onerror = () => {
+        clearInterval(simTimer);
+        reject(new Error("Network error — please check your connection."));
+      };
+      xhr.ontimeout = () => {
+        clearInterval(simTimer);
+        reject(new Error("Request timed out."));
+      };
 
       xhr.send(formData);
     });

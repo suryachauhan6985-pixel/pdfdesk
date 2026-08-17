@@ -196,6 +196,6 @@ compressBtn.addEventListener("click", async () => {
     showStatus(err.message || "Something went wrong.", "error");
   } finally {
     compressBtn.disabled = false;
-    PDFDeskOverlay.hide();
+    PDFDeskOverlay.hide(500);
   }
 });

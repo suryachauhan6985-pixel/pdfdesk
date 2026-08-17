@@ -238,6 +238,6 @@ splitBtn.addEventListener("click", async () => {
     showStatus(err.message || "Something went wrong.", "error");
   } finally {
     splitBtn.disabled = false;
-    PDFDeskOverlay.hide();
+    PDFDeskOverlay.hide(500);
   }
 });

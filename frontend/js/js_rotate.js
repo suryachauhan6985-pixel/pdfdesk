@@ -179,6 +179,6 @@ rotateBtn.addEventListener("click", async () => {
     showStatus(err.message || "Something went wrong.", "error");
   } finally {
     rotateBtn.disabled = false;
-    PDFDeskOverlay.hide();
+    PDFDeskOverlay.hide(500);
   }
 });

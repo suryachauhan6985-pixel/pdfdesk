@@ -200,6 +200,6 @@ mergeBtn.addEventListener("click", async () => {
     showStatus(err.message || "Something went wrong.", "error");
   } finally {
     mergeBtn.disabled = files.length < 2;
-    PDFDeskOverlay.hide();
+    PDFDeskOverlay.hide(500);
   }
 });
