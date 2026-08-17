@@ -201,8 +201,7 @@ splitBtn.addEventListener("click", async () => {
   }
 
   splitBtn.disabled = true;
-  showStatus("");
-  PDFDeskOverlay.show("Splitting PDF");
+  showStatus("Splitting PDF... please wait");
 
   try {
     const formData = new FormData();
@@ -210,7 +209,10 @@ splitBtn.addEventListener("click", async () => {
     formData.append("ranges", JSON.stringify(ranges));
     formData.append("merge", mergeRangesCheck.checked ? "1" : "0");
 
-    const res = await PDFDeskOverlay.upload(`${API_BASE}/api/split`, formData);
+    const res = await fetch(`${API_BASE}/api/split`, {
+      method: "POST",
+      body: formData
+    });
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
@@ -238,6 +240,5 @@ splitBtn.addEventListener("click", async () => {
     showStatus(err.message || "Something went wrong.", "error");
   } finally {
     splitBtn.disabled = false;
-    PDFDeskOverlay.hide(500);
   }
 });
