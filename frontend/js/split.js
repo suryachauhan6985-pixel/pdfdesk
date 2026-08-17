@@ -1,6 +1,6 @@
 // Split PDF — multiple ranges support (iLovePDF style)
 
-const API_BASE = "http://localhost:5050";
+const API_BASE = "https://pdfdesk.onrender.com";
 
 if (window.pdfjsLib) {
   pdfjsLib.GlobalWorkerOptions.workerSrc =
