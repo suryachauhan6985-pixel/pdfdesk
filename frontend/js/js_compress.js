@@ -160,6 +160,7 @@ compressBtn.addEventListener("click", async () => {
     const originalSize = Number(res.headers.get("X-Original-Size")) || selectedFile.size;
     const compressedSize = Number(res.headers.get("X-Compressed-Size")) || 0;
     const achievedTarget = res.headers.get("X-Achieved-Target");
+    const imagesFound = Number(res.headers.get("X-Images-Found"));
 
     resultBlob = await res.blob();
 
@@ -180,7 +181,12 @@ compressBtn.addEventListener("click", async () => {
     resultCard.hidden = false;
     compressBtn.textContent = "Download Compressed PDF →";
 
-    if (level === "custom" && achievedTarget === "false") {
+    if (imagesFound === 0) {
+      showStatus(
+        "This PDF has no images we could compress further (text-only, vector, or an unsupported image format) — only small metadata savings were possible.",
+        "error"
+      );
+    } else if (level === "custom" && achievedTarget === "false") {
       showStatus(
         "Couldn't shrink all the way to your target — this is the smallest we could get without ruining quality.",
         "error"

@@ -4,7 +4,9 @@ const {
   PDFDocument,
   PDFName,
   PDFRawStream,
-  PDFNumber
+  PDFNumber,
+  PDFRef,
+  PDFArray
 } = require("pdf-lib");
 const jpeg = require("jpeg-js");
 
@@ -80,9 +82,104 @@ function resizeRGBA(data, width, height, scale) {
   return { data: out, width: newWidth, height: newHeight };
 }
 
+/** Resolve a possibly-indirect PDF object to its concrete value. */
+function resolve(context, obj) {
+  if (obj instanceof PDFRef) return context.lookup(obj);
+  return obj;
+}
+
 /**
- * Load the PDF once, strip metadata, and collect every DCTDecode (JPEG)
- * image stream with its ref + decoded pixel data, decoded exactly once.
+ * Work out how many colour components an image's ColorSpace uses.
+ * Handles the common cases (DeviceRGB/Gray/CMYK, CalRGB/CalGray, and
+ * ICCBased via its /N entry). Anything else (Indexed, Separation,
+ * DeviceN, ...) returns null so that image is safely left untouched.
+ */
+function getComponentCount(context, csEntry) {
+  try {
+    const cs = resolve(context, csEntry);
+    if (!cs) return null;
+
+    // Direct colour space name, e.g. /DeviceRGB
+    if (typeof cs.toString === "function" && !(cs instanceof PDFArray)) {
+      const name = cs.toString();
+      if (name === "/DeviceRGB" || name === "/CalRGB") return 3;
+      if (name === "/DeviceGray" || name === "/CalGray") return 1;
+      if (name === "/DeviceCMYK") return 4;
+      return null;
+    }
+
+    // Array form, e.g. [/ICCBased 5 0 R]
+    if (cs instanceof PDFArray) {
+      const arr = cs.asArray();
+      const kind = resolve(context, arr[0])?.toString();
+      if (kind === "/ICCBased") {
+        const iccStream = resolve(context, arr[1]);
+        const n = iccStream?.dict?.get(PDFName.of("N"));
+        const num = n instanceof PDFNumber ? n.asNumber() : null;
+        if (num === 1 || num === 3 || num === 4) return num;
+        return null;
+      }
+      if (kind === "/CalRGB") return 3;
+      if (kind === "/CalGray") return 1;
+      return null; // Indexed, Separation, DeviceN, Lab, etc. — skip
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Decode a FlateDecode raster image (8-bit DeviceGray/RGB/CMYK only) into
+ * an RGBA buffer so it can go through the same JPEG re-encode pipeline as
+ * a DCTDecode image. Scanned PDFs very often store pages this way rather
+ * than as JPEGs, so without this step "compress" has nothing to shrink.
+ */
+function decodeFlateImage(context, dict, rawBytes) {
+  const bpc = dict.get(PDFName.of("BitsPerComponent"));
+  const bpcNum = bpc instanceof PDFNumber ? bpc.asNumber() : null;
+  if (bpcNum !== 8) return null; // only handling the common 8-bit case
+
+  const widthObj = dict.get(PDFName.of("Width"));
+  const heightObj = dict.get(PDFName.of("Height"));
+  const width = widthObj instanceof PDFNumber ? widthObj.asNumber() : null;
+  const height = heightObj instanceof PDFNumber ? heightObj.asNumber() : null;
+  if (!width || !height) return null;
+
+  const components = getComponentCount(context, dict.get(PDFName.of("ColorSpace")));
+  if (!components) return null;
+
+  const expected = width * height * components;
+  if (rawBytes.length < expected) return null;
+
+  const data = Buffer.alloc(width * height * 4);
+  for (let i = 0; i < width * height; i++) {
+    const o = i * 4;
+    if (components === 1) {
+      const g = rawBytes[i];
+      data[o] = g; data[o + 1] = g; data[o + 2] = g; data[o + 3] = 255;
+    } else if (components === 3) {
+      const s = i * 3;
+      data[o] = rawBytes[s]; data[o + 1] = rawBytes[s + 1]; data[o + 2] = rawBytes[s + 2]; data[o + 3] = 255;
+    } else if (components === 4) {
+      const s = i * 4;
+      const c = rawBytes[s], m = rawBytes[s + 1], y = rawBytes[s + 2], k = rawBytes[s + 3];
+      data[o] = 255 - Math.min(255, c + k);
+      data[o + 1] = 255 - Math.min(255, m + k);
+      data[o + 2] = 255 - Math.min(255, y + k);
+      data[o + 3] = 255;
+    }
+  }
+
+  return { data, width, height };
+}
+
+/**
+ * Load the PDF once, strip metadata, and collect every image stream —
+ * both DCTDecode (JPEG) and FlateDecode (raw bitmap) — with its ref and
+ * decoded pixel data, decoded exactly once regardless of how many
+ * quality/scale combos we later try on it.
  */
 async function prepareDoc(srcBytes) {
   const pdfDoc = await PDFDocument.load(srcBytes, {
@@ -114,12 +211,23 @@ async function prepareDoc(srcBytes) {
       ? filter.asArray().map((f) => f.toString())
       : [filter.toString()];
 
-    if (!filterNames.includes("/DCTDecode")) continue;
+    // Original stored (still-encoded) length — this is what we compare
+    // any recompressed result against to make sure we're really shrinking.
+    const lengthEntry = resolve(context, dict.get(PDFName.of("Length")));
+    const origLength = lengthEntry instanceof PDFNumber ? lengthEntry.asNumber() : Infinity;
 
     try {
-      const rawBytes = obj.getContents();
-      const decoded = jpeg.decode(rawBytes, { useTArray: true });
-      images.push({ ref, dict, decoded, origLength: rawBytes.length });
+      if (filterNames.includes("/DCTDecode")) {
+        const rawBytes = obj.getContents();
+        const decoded = jpeg.decode(rawBytes, { useTArray: true });
+        images.push({ ref, dict, decoded, origLength });
+      } else if (filterNames.length === 1 && filterNames[0] === "/FlateDecode") {
+        const rawBytes = obj.getContents(); // already zlib-inflated by pdf-lib
+        const decoded = decodeFlateImage(context, dict, rawBytes);
+        if (decoded) images.push({ ref, dict, decoded, origLength });
+      }
+      // Other filters (CCITTFax, JPXDecode, Indexed colour spaces, etc.)
+      // are left untouched — decoding those safely needs extra libraries.
     } catch (e) {
       console.warn("Compress: skipped one image (decode failed) —", e.message);
     }
@@ -151,6 +259,13 @@ async function buildOutput(pdfDoc, context, images, combo) {
       newDict.set(PDFName.of("Width"), PDFNumber.of(width));
       newDict.set(PDFName.of("Height"), PDFNumber.of(height));
       newDict.set(PDFName.of("Length"), PDFNumber.of(recompressed.data.length));
+      // Whatever the source was (JPEG or raw Flate bitmap), the output of
+      // jpeg.encode() is always an 8-bit RGB JPEG — the dict must say so.
+      newDict.set(PDFName.of("Filter"), PDFName.of("DCTDecode"));
+      newDict.set(PDFName.of("ColorSpace"), PDFName.of("DeviceRGB"));
+      newDict.set(PDFName.of("BitsPerComponent"), PDFNumber.of(8));
+      newDict.delete(PDFName.of("DecodeParms"));
+      newDict.delete(PDFName.of("Decode"));
       const newStream = PDFRawStream.of(newDict, recompressed.data);
       context.assign(img.ref, newStream);
     }
@@ -246,13 +361,14 @@ router.post("/", upload.single("file"), async (req, res) => {
     );
     res.setHeader("X-Original-Size", String(originalSize));
     res.setHeader("X-Compressed-Size", String(compressedSize));
+    res.setHeader("X-Images-Found", String(images.length));
     if (targetSize !== null) {
       res.setHeader("X-Target-Size", String(targetSize));
       res.setHeader("X-Achieved-Target", String(!!achievedTarget));
     }
     res.setHeader(
       "Access-Control-Expose-Headers",
-      "X-Original-Size, X-Compressed-Size, X-Target-Size, X-Achieved-Target"
+      "X-Original-Size, X-Compressed-Size, X-Images-Found, X-Target-Size, X-Achieved-Target"
     );
     res.send(Buffer.from(outBytes));
   } catch (err) {
