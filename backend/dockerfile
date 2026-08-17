@@ -10,10 +10,10 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY backend/package*.json ./
+COPY package*.json ./
 RUN npm install --omit=dev
 
-COPY backend/ ./
+COPY . ./
 
 ENV PORT=10000
 EXPOSE 10000
