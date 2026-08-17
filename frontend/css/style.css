@@ -1075,6 +1075,24 @@ button { font-family: inherit; cursor: pointer; }
   min-height: 100vh;
 }
 
+/* Bounded-height edit workspace so the toolbar / thumb rail stay pinned
+   and only the page stage scrolls internally, instead of the whole
+   document scrolling and carrying the toolbar off-screen. */
+@media (min-width: 901px) {
+  .edit-page-body,
+  .edit-page-body .app-layout {
+    height: 100vh;
+    overflow: hidden;
+  }
+  .edit-page-body .edit-layout {
+    height: 100vh;
+    min-height: 0;
+  }
+  .edit-page-body #editSide {
+    overflow-y: auto;
+  }
+}
+
 .edit-toolbar {
   display: flex;
   align-items: center;

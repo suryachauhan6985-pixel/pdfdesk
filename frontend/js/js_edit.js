@@ -17,6 +17,7 @@ const fileInput = document.getElementById("fileInput");
 const imageInput = document.getElementById("imageInput");
 const selectBtn = document.getElementById("selectBtn");
 const thumbRail = document.getElementById("thumbRail");
+const stageWrap = document.querySelector(".edit-stage-wrap");
 const stage = document.getElementById("stage");
 const pageCanvas = document.getElementById("pageCanvas");
 const statusEl = document.getElementById("status");
@@ -143,15 +144,21 @@ async function renderThumbRail() {
   }
 }
 
-async function switchPage(index) {
+async function switchPage(index, opts = {}) {
+  if (index < 0 || index >= totalPages) return;
   if (index === currentPage) return;
   commitActiveTextEdit();
   currentPage = index;
   thumbRail.querySelectorAll(".edit-thumb").forEach((t) => {
-    t.classList.toggle("active", Number(t.dataset.i) === index);
+    const isActive = Number(t.dataset.i) === index;
+    // Only one thumbnail is ever marked active/focused — the one for the
+    // page currently on the stage.
+    t.classList.toggle("active", isActive);
+    if (isActive) t.scrollIntoView({ block: "nearest", behavior: "smooth" });
   });
   deselectAll();
   await renderPage(index);
+  if (!opts.keepScroll) stageWrap.scrollTop = 0;
 }
 
 async function renderPage(index) {
@@ -176,6 +183,40 @@ async function renderPage(index) {
 
   renderOverlayElements();
 }
+
+// ---------- Scroll to change page ----------
+// When the current page is fully in view (nothing left to scroll) and the
+// user keeps scrolling down, move to the next page — and the reverse at
+// the top. This lets people flip pages by scrolling instead of only by
+// clicking a thumbnail.
+let wheelNavLock = false;
+stageWrap.addEventListener(
+  "wheel",
+  (e) => {
+    if (!pdfDocJS || wheelNavLock || Math.abs(e.deltaY) < 2) return;
+
+    const atTop = stageWrap.scrollTop <= 1;
+    const atBottom =
+      stageWrap.scrollTop + stageWrap.clientHeight >= stageWrap.scrollHeight - 1;
+
+    if (e.deltaY < 0 && atTop && currentPage > 0) {
+      e.preventDefault();
+      wheelNavLock = true;
+      switchPage(currentPage - 1, { keepScroll: true }).then(() => {
+        requestAnimationFrame(() => {
+          stageWrap.scrollTop = stageWrap.scrollHeight;
+        });
+      });
+      setTimeout(() => (wheelNavLock = false), 500);
+    } else if (e.deltaY > 0 && atBottom && currentPage < totalPages - 1) {
+      e.preventDefault();
+      wheelNavLock = true;
+      switchPage(currentPage + 1);
+      setTimeout(() => (wheelNavLock = false), 500);
+    }
+  },
+  { passive: false }
+);
 
 function strokePath(ctx, path) {
   if (!path.points.length) return;
