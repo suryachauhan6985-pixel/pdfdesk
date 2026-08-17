@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Split PDF — PDFDesk</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <a href="index.html" class="sidebar-logo">PDF<span>Desk</span></a>
+      <nav class="sidebar-nav">
+        <a href="index.html" class="sidebar-link"><span class="sidebar-icon">🏠</span> Home</a>
+        <a href="merge.html" class="sidebar-link"><span class="sidebar-icon">🧩</span> Merge PDF</a>
+        <a href="split.html" class="sidebar-link active"><span class="sidebar-icon">✂️</span> Split PDF</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">🗜️</span> Compress</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">🔄</span> Rotate</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">🖼️</span> PDF to JPG</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">📄</span> JPG to PDF</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">💧</span> Watermark</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">🔒</span> Protect</a>
+      </nav>
+      <div class="sidebar-footer"><span class="stage-badge">Stage 1</span></div>
+    </aside>
+
+    <div class="tool-layout page-enter">
+      <section class="merge-main" id="splitMain">
+        <!-- Empty state -->
+        <div class="dropzone-big" id="dropzone">
+          <div class="dropzone-content">
+            <div class="dropzone-icon">✂️</div>
+            <h2>Select a PDF to split</h2>
+            <p>or drag and drop a PDF here</p>
+            <button class="btn btn-primary btn-lg" id="selectBtn">Select PDF file</button>
+          </div>
+        </div>
+
+        <!-- Ranges visual area -->
+        <div class="ranges-area" id="rangesArea" hidden>
+          <div class="ranges-grid" id="rangesGrid">
+            <!-- range cards injected here -->
+          </div>
+        </div>
+      </section>
+
+      <aside class="merge-side">
+        <h1>Split PDF</h1>
+        <p class="side-desc">Split your PDF into multiple files by defining page ranges.</p>
+
+        <div id="splitControls" hidden>
+          <div class="ranges-list" id="rangesList">
+            <!-- range inputs injected here -->
+          </div>
+
+          <button class="btn-add-range" id="addRangeBtn">+ Add Range</button>
+
+          <label class="merge-check">
+            <input type="checkbox" id="mergeRangesCheck" />
+            <span>Merge all ranges into one PDF</span>
+          </label>
+        </div>
+
+        <div class="side-status" id="status"></div>
+        <button class="btn btn-primary btn-merge" id="splitBtn" disabled>Split PDF →</button>
+      </aside>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept="application/pdf" hidden />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="js/split.js"></script>
+</body>
+</html>
