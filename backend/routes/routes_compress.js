@@ -182,10 +182,31 @@ function decodeFlateImage(context, dict, rawBytes) {
  * quality/scale combos we later try on it.
  */
 async function prepareDoc(srcBytes) {
-  const pdfDoc = await PDFDocument.load(srcBytes, {
-    ignoreEncryption: true,
-    updateMetadata: false
-  });
+  let pdfDoc;
+  let encryptedUnreadable = false;
+
+  try {
+    // Most "protected" PDFs only restrict printing/editing and have an
+    // empty user password — pdf-lib can decrypt those transparently as
+    // long as we DON'T pass ignoreEncryption, so image streams come back
+    // as real JPEG/raw bytes instead of ciphertext.
+    pdfDoc = await PDFDocument.load(srcBytes, { updateMetadata: false });
+  } catch (e) {
+    const msg = (e && e.message) || "";
+    const isEncryptionError =
+      e?.constructor?.name === "EncryptedPDFError" || /encrypt/i.test(msg);
+
+    if (!isEncryptionError) throw e;
+
+    // Genuinely needs a real user password we don't have — load it anyway
+    // so we can still strip metadata, but image streams will stay as
+    // undecryptable ciphertext and must be skipped rather than "fixed".
+    pdfDoc = await PDFDocument.load(srcBytes, {
+      ignoreEncryption: true,
+      updateMetadata: false
+    });
+    encryptedUnreadable = true;
+  }
 
   pdfDoc.setTitle("");
   pdfDoc.setAuthor("");
@@ -198,6 +219,8 @@ async function prepareDoc(srcBytes) {
   const images = [];
 
   for (const [ref, obj] of context.enumerateIndirectObjects()) {
+    if (encryptedUnreadable) break; // image bytes are ciphertext — nothing to decode
+
     if (!(obj instanceof PDFRawStream)) continue;
 
     const dict = obj.dict;
@@ -233,7 +256,7 @@ async function prepareDoc(srcBytes) {
     }
   }
 
-  return { pdfDoc, context, images };
+  return { pdfDoc, context, images, encryptedUnreadable };
 }
 
 /**
@@ -296,7 +319,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       ? req.body.level
       : (req.body.level === "custom" ? "custom" : "medium");
 
-    const { pdfDoc, context, images } = await prepareDoc(srcBytes);
+    const { pdfDoc, context, images, encryptedUnreadable } = await prepareDoc(srcBytes);
 
     let outBytes;
     let achievedTarget = null;
@@ -362,13 +385,14 @@ router.post("/", upload.single("file"), async (req, res) => {
     res.setHeader("X-Original-Size", String(originalSize));
     res.setHeader("X-Compressed-Size", String(compressedSize));
     res.setHeader("X-Images-Found", String(images.length));
+    res.setHeader("X-Encrypted-Unreadable", String(!!encryptedUnreadable));
     if (targetSize !== null) {
       res.setHeader("X-Target-Size", String(targetSize));
       res.setHeader("X-Achieved-Target", String(!!achievedTarget));
     }
     res.setHeader(
       "Access-Control-Expose-Headers",
-      "X-Original-Size, X-Compressed-Size, X-Images-Found, X-Target-Size, X-Achieved-Target"
+      "X-Original-Size, X-Compressed-Size, X-Images-Found, X-Encrypted-Unreadable, X-Target-Size, X-Achieved-Target"
     );
     res.send(Buffer.from(outBytes));
   } catch (err) {
