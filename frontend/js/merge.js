@@ -170,16 +170,14 @@ mergeBtn.addEventListener("click", async () => {
   if (files.length < 2) return;
 
   mergeBtn.disabled = true;
-  showStatus("Merging PDFs... please wait");
+  showStatus("");
+  PDFDeskOverlay.show("Merging PDFs");
 
   try {
     const formData = new FormData();
     files.forEach((item) => formData.append("files", item.file));
 
-    const res = await fetch(`${API_BASE}/api/merge`, {
-      method: "POST",
-      body: formData
-    });
+    const res = await PDFDeskOverlay.upload(`${API_BASE}/api/merge`, formData);
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
@@ -202,5 +200,6 @@ mergeBtn.addEventListener("click", async () => {
     showStatus(err.message || "Something went wrong.", "error");
   } finally {
     mergeBtn.disabled = files.length < 2;
+    PDFDeskOverlay.hide(500);
   }
 });
