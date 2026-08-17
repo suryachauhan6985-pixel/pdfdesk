@@ -3,7 +3,7 @@
     "type": "file",
     "label": "frontend/js/js_compress.js",
     "file": "frontend/js/js_compress.js",
-    "detail": "Defines 5 function(s) implementing supporting logic."
+    "detail": "Defines 6 function(s) implementing supporting logic."
   },
   {
     "type": "function",
@@ -34,6 +34,12 @@
     "label": "selectFile",
     "file": "frontend/js/js_compress.js",
     "detail": "(file)"
+  },
+  {
+    "type": "function",
+    "label": "getTargetBytes",
+    "file": "frontend/js/js_compress.js",
+    "detail": "()"
   },
   {
     "type": "file",
@@ -178,6 +184,42 @@
     "label": "backend/routes/routes_compress.js",
     "file": "backend/routes/routes_compress.js",
     "detail": "Defines HTTP route handlers (controller/router layer)."
+  },
+  {
+    "type": "function",
+    "label": "resizeRGBA",
+    "file": "backend/routes/routes_compress.js",
+    "detail": "(data, width, height, scale)"
+  },
+  {
+    "type": "function",
+    "label": "resolve",
+    "file": "backend/routes/routes_compress.js",
+    "detail": "(context, obj)"
+  },
+  {
+    "type": "function",
+    "label": "getComponentCount",
+    "file": "backend/routes/routes_compress.js",
+    "detail": "(context, csEntry)"
+  },
+  {
+    "type": "function",
+    "label": "decodeFlateImage",
+    "file": "backend/routes/routes_compress.js",
+    "detail": "(context, dict, rawBytes)"
+  },
+  {
+    "type": "function",
+    "label": "prepareDoc",
+    "file": "backend/routes/routes_compress.js",
+    "detail": "(srcBytes)"
+  },
+  {
+    "type": "function",
+    "label": "buildOutput",
+    "file": "backend/routes/routes_compress.js",
+    "detail": "(pdfDoc, context, images, combo)"
   },
   {
     "type": "file",

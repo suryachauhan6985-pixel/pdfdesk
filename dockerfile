@@ -1,0 +1,21 @@
+FROM node:20-bookworm-slim
+
+# Ghostscript = the actual engine that gives you iLovePDF-level compression.
+# It handles EVERY PDF image format (JPEG, CCITT fax/scanned docs, JBIG2,
+# JPEG2000, Indexed/palette) plus font subsetting + content-stream
+# optimization, so it also shrinks text-only PDFs, not just image PDFs.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ghostscript && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY backend/package*.json ./
+RUN npm install --omit=dev
+
+COPY backend/ ./
+
+ENV PORT=10000
+EXPOSE 10000
+
+CMD ["node", "server.js"]

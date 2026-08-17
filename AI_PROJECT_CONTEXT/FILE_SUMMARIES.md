@@ -4,12 +4,12 @@ Deep analysis of every important source file.
 
 ## `frontend/js/js_compress.js`
 
-- **Purpose:** Defines 5 function(s) implementing supporting logic.
-- **Lines of code:** 147
-- **Complexity:** Medium (heuristic score: 21)
+- **Purpose:** Defines 6 function(s) implementing supporting logic.
+- **Lines of code:** 215
+- **Complexity:** Medium (heuristic score: 34)
 - **Imports:** None
 - **Exports:** None
-- **Functions:** showStatus(msg, type = ""), formatBytes(bytes), resetResult(), updateUI(), selectFile(file)
+- **Functions:** showStatus(msg, type = ""), formatBytes(bytes), resetResult(), updateUI(), selectFile(file), getTargetBytes()
 - **Classes:** None
 - **API endpoints:** None
 - **Database usage:** Raw SQL detected (1 statement keyword: SELECT)
@@ -136,17 +136,18 @@ Deep analysis of every important source file.
 ## `backend/routes/routes_compress.js`
 
 - **Purpose:** Defines HTTP route handlers (controller/router layer).
-- **Lines of code:** 126
-- **Complexity:** Low (heuristic score: 12)
+- **Lines of code:** 426
+- **Complexity:** High (heuristic score: 64)
 - **Imports:** express, multer, pdf-lib, jpeg-js
 - **Exports:** module.exports
-- **Functions:** None
+- **Functions:** resizeRGBA(data, width, height, scale), resolve(context, obj), getComponentCount(context, csEntry), decodeFlateImage(context, dict, rawBytes), prepareDoc(srcBytes), buildOutput(pdfDoc, context, images, combo)
 - **Classes:** None
 - **API endpoints:** POST /
-- **Database usage:** None
+- **Database usage:** Raw SQL detected (1 statement keyword: JOIN)
 - **Environment variables used:** None
 - **Potential improvements:**
-  - No functions or classes detected — file may be mostly configuration or could benefit from clearer structure.
+  - High branching complexity detected — consider refactoring conditional logic into smaller helpers.
+  - Raw SQL strings detected — verify parameterized queries are used to prevent SQL injection.
 
 ---
 

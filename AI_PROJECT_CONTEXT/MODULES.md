@@ -37,7 +37,7 @@ Database
 
 | File | Purpose |
 | --- | --- |
-| frontend/js/js_compress.js | Defines 5 function(s) implementing supporting logic. |
+| frontend/js/js_compress.js | Defines 6 function(s) implementing supporting logic. |
 | frontend/js/js_rotate.js | Defines 5 function(s) implementing supporting logic. |
 | frontend/js/main.js | Supporting source file. |
 | frontend/js/merge.js | Defines 6 function(s) implementing supporting logic. |
