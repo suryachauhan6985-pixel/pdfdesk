@@ -217,6 +217,7 @@ async function prepareDoc(srcBytes) {
 
   const context = pdfDoc.context;
   const images = [];
+  let totalImageObjects = 0;
 
   for (const [ref, obj] of context.enumerateIndirectObjects()) {
     if (encryptedUnreadable) break; // image bytes are ciphertext — nothing to decode
@@ -227,12 +228,17 @@ async function prepareDoc(srcBytes) {
     const subtype = dict.get(PDFName.of("Subtype"));
     if (!subtype || subtype.toString() !== "/Image") continue;
 
-    const filter = dict.get(PDFName.of("Filter"));
-    if (!filter) continue;
+    totalImageObjects++;
 
-    const filterNames = Array.isArray(filter.asArray?.())
-      ? filter.asArray().map((f) => f.toString())
-      : [filter.toString()];
+    const filter = dict.get(PDFName.of("Filter"));
+    // No /Filter key at all means the image is stored raw/uncompressed —
+    // getContents() just returns those bytes as-is, same shape as a
+    // FlateDecode image once inflated, so route it the same way.
+    const filterNames = !filter
+      ? []
+      : Array.isArray(filter.asArray?.())
+        ? filter.asArray().map((f) => f.toString())
+        : [filter.toString()];
 
     // Original stored (still-encoded) length — this is what we compare
     // any recompressed result against to make sure we're really shrinking.
@@ -244,19 +250,32 @@ async function prepareDoc(srcBytes) {
         const rawBytes = obj.getContents();
         const decoded = jpeg.decode(rawBytes, { useTArray: true });
         images.push({ ref, dict, decoded, origLength });
-      } else if (filterNames.length === 1 && filterNames[0] === "/FlateDecode") {
-        const rawBytes = obj.getContents(); // already zlib-inflated by pdf-lib
+        console.log(`Compress: image OK (JPEG) — ${decoded.width}x${decoded.height}, ${origLength}B`);
+      } else if (filterNames.length === 0 || (filterNames.length === 1 && filterNames[0] === "/FlateDecode")) {
+        const rawBytes = obj.getContents(); // raw or zlib-inflated by pdf-lib
         const decoded = decodeFlateImage(context, dict, rawBytes);
-        if (decoded) images.push({ ref, dict, decoded, origLength });
+        if (decoded) {
+          images.push({ ref, dict, decoded, origLength });
+          console.log(`Compress: image OK (raw/${filterNames[0] || "none"}) — ${decoded.width}x${decoded.height}, ${origLength}B`);
+        } else {
+          const cs = dict.get(PDFName.of("ColorSpace"));
+          const bpc = dict.get(PDFName.of("BitsPerComponent"));
+          console.log(
+            `Compress: skipped image — unsupported ColorSpace/BitsPerComponent ` +
+            `(cs=${cs ? cs.toString() : "?"}, bpc=${bpc ? bpc.toString() : "?"}, filter=${filterNames[0] || "none"})`
+          );
+        }
+      } else {
+        console.log(`Compress: skipped image — unsupported filter(s): ${filterNames.join(", ")}`);
       }
-      // Other filters (CCITTFax, JPXDecode, Indexed colour spaces, etc.)
-      // are left untouched — decoding those safely needs extra libraries.
     } catch (e) {
       console.warn("Compress: skipped one image (decode failed) —", e.message);
     }
   }
 
-  return { pdfDoc, context, images, encryptedUnreadable };
+  console.log(`Compress: found ${totalImageObjects} image object(s), ${images.length} processable`);
+
+  return { pdfDoc, context, images, encryptedUnreadable, totalImageObjects };
 }
 
 /**
@@ -319,7 +338,7 @@ router.post("/", upload.single("file"), async (req, res) => {
       ? req.body.level
       : (req.body.level === "custom" ? "custom" : "medium");
 
-    const { pdfDoc, context, images, encryptedUnreadable } = await prepareDoc(srcBytes);
+    const { pdfDoc, context, images, encryptedUnreadable, totalImageObjects } = await prepareDoc(srcBytes);
 
     let outBytes;
     let achievedTarget = null;
@@ -385,6 +404,7 @@ router.post("/", upload.single("file"), async (req, res) => {
     res.setHeader("X-Original-Size", String(originalSize));
     res.setHeader("X-Compressed-Size", String(compressedSize));
     res.setHeader("X-Images-Found", String(images.length));
+    res.setHeader("X-Images-Total", String(totalImageObjects));
     res.setHeader("X-Encrypted-Unreadable", String(!!encryptedUnreadable));
     if (targetSize !== null) {
       res.setHeader("X-Target-Size", String(targetSize));
@@ -392,7 +412,7 @@ router.post("/", upload.single("file"), async (req, res) => {
     }
     res.setHeader(
       "Access-Control-Expose-Headers",
-      "X-Original-Size, X-Compressed-Size, X-Images-Found, X-Encrypted-Unreadable, X-Target-Size, X-Achieved-Target"
+      "X-Original-Size, X-Compressed-Size, X-Images-Found, X-Images-Total, X-Encrypted-Unreadable, X-Target-Size, X-Achieved-Target"
     );
     res.send(Buffer.from(outBytes));
   } catch (err) {

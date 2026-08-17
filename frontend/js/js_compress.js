@@ -161,6 +161,7 @@ compressBtn.addEventListener("click", async () => {
     const compressedSize = Number(res.headers.get("X-Compressed-Size")) || 0;
     const achievedTarget = res.headers.get("X-Achieved-Target");
     const imagesFound = Number(res.headers.get("X-Images-Found"));
+    const imagesTotal = Number(res.headers.get("X-Images-Total"));
     const encryptedUnreadable = res.headers.get("X-Encrypted-Unreadable") === "true";
 
     resultBlob = await res.blob();
@@ -187,9 +188,14 @@ compressBtn.addEventListener("click", async () => {
         "This PDF is password-protected with an unknown password — only metadata could be removed. Remove the password first for full compression.",
         "error"
       );
-    } else if (imagesFound === 0) {
+    } else if (imagesFound === 0 && imagesTotal === 0) {
       showStatus(
-        "This PDF has no images we could compress further (text-only, vector, or an unsupported image format) — only small metadata savings were possible.",
+        "This PDF has no embedded images — it's text/vector content, which is already compact. Only small metadata savings were possible.",
+        "error"
+      );
+    } else if (imagesFound === 0 && imagesTotal > 0) {
+      showStatus(
+        `Found ${imagesTotal} image(s) in this PDF, but they use a format we don't support re-compressing yet (e.g. scanned fax/CCITT or indexed-palette images).`,
         "error"
       );
     } else if (level === "custom" && achievedTarget === "false") {
