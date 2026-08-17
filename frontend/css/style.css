@@ -1072,7 +1072,6 @@ button { font-family: inherit; cursor: pointer; }
 .edit-layout {
   flex: 1;
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
 }
 
@@ -1299,6 +1298,13 @@ button { font-family: inherit; cursor: pointer; }
 .edit-empty-icon { font-size: 3rem; margin-bottom: 14px; opacity: 0.7; }
 
 @media (max-width: 900px) {
+  .edit-layout { flex-direction: column; }
+  #editSide {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding: 20px;
+  }
   .edit-thumb-rail { width: 80px; }
   .edit-toolbar { padding: 8px 12px; gap: 4px; }
   .edit-tool-btn { width: 34px; height: 34px; font-size: 0.95rem; }
