@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compress PDF — PDFDesk</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <a href="index.html" class="sidebar-logo">PDF<span>Desk</span></a>
+      <nav class="sidebar-nav">
+        <a href="index.html" class="sidebar-link"><span class="sidebar-icon">🏠</span> Home</a>
+        <a href="merge.html" class="sidebar-link"><span class="sidebar-icon">🧩</span> Merge PDF</a>
+        <a href="split.html" class="sidebar-link"><span class="sidebar-icon">✂️</span> Split PDF</a>
+        <a href="compress.html" class="sidebar-link active"><span class="sidebar-icon">🗜️</span> Compress</a>
+        <a href="rotate.html" class="sidebar-link"><span class="sidebar-icon">🔄</span> Rotate</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">🖼️</span> PDF to JPG</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">📄</span> JPG to PDF</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">💧</span> Watermark</a>
+        <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">🔒</span> Protect</a>
+      </nav>
+      <div class="sidebar-footer"><span class="stage-badge">Live</span></div>
+    </aside>
+
+    <div class="tool-layout page-enter">
+      <section class="merge-main" id="compressMain">
+        <!-- Empty state -->
+        <div class="dropzone-big" id="dropzone">
+          <div class="dropzone-content">
+            <div class="dropzone-icon">🗜️</div>
+            <h2>Select a PDF to compress</h2>
+            <p>or drag and drop a PDF here</p>
+            <button class="btn btn-primary btn-lg" id="selectBtn">Select PDF file</button>
+          </div>
+        </div>
+
+        <!-- File selected / result preview -->
+        <div class="compress-preview" id="compressPreview" hidden>
+          <div class="compress-file-card" id="fileCard">
+            <div class="compress-file-icon">📄</div>
+            <div class="compress-file-name" id="fileName"></div>
+            <div class="compress-file-size" id="fileSize"></div>
+          </div>
+
+          <div class="compress-result" id="resultCard" hidden>
+            <div class="compress-savings" id="savingsText"></div>
+            <div class="compress-bar"><div class="compress-bar-fill" id="barFill"></div></div>
+            <div class="compress-result-row">
+              <span>Original</span><strong id="origSizeText"></strong>
+            </div>
+            <div class="compress-result-row">
+              <span>Compressed</span><strong id="newSizeText"></strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="merge-side">
+        <h1>Compress PDF</h1>
+        <p class="side-desc">Shrink your PDF's file size by re-compressing embedded images.</p>
+
+        <div id="compressControls" hidden>
+          <div class="compress-levels">
+            <label class="compress-level">
+              <input type="radio" name="level" value="low" />
+              <div class="compress-level-text">
+                <span class="compress-level-name">Low compression</span>
+                <span class="compress-level-desc">Best quality, smaller savings</span>
+              </div>
+            </label>
+            <label class="compress-level">
+              <input type="radio" name="level" value="medium" checked />
+              <div class="compress-level-text">
+                <span class="compress-level-name">Recommended</span>
+                <span class="compress-level-desc">Good balance of quality and size</span>
+              </div>
+            </label>
+            <label class="compress-level">
+              <input type="radio" name="level" value="high" />
+              <div class="compress-level-text">
+                <span class="compress-level-name">High compression</span>
+                <span class="compress-level-desc">Smallest file, lower image quality</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="side-status" id="status"></div>
+        <button class="btn btn-primary btn-merge" id="compressBtn" disabled>Compress PDF →</button>
+      </aside>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept="application/pdf" hidden />
+  <script src="js/js_compress.js"></script>
+</body>
+</html>

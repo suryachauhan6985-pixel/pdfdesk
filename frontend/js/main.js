@@ -3,8 +3,8 @@
 const TOOLS = [
   { id: "merge", name: "Merge PDF", desc: "Combine multiple PDFs into one file", icon: "🧩", href: "merge.html", active: true },
   { id: "split", name: "Split PDF", desc: "Extract pages or split into multiple files", icon: "✂️", href: "split.html", active: true },
-  { id: "compress", name: "Compress PDF", desc: "Reduce file size while keeping quality", icon: "🗜️", href: "#", active: false },
-  { id: "rotate", name: "Rotate PDF", desc: "Rotate pages left or right", icon: "🔄", href: "#", active: false },
+  { id: "compress", name: "Compress PDF", desc: "Reduce file size while keeping quality", icon: "🗜️", href: "compress.html", active: true },
+  { id: "rotate", name: "Rotate PDF", desc: "Rotate pages left or right", icon: "🔄", href: "rotate.html", active: true },
   { id: "pdf-to-jpg", name: "PDF to JPG", desc: "Convert PDF pages to images", icon: "🖼️", href: "#", active: false },
   { id: "jpg-to-pdf", name: "JPG to PDF", desc: "Convert images into a PDF", icon: "📄", href: "#", active: false },
   { id: "watermark", name: "Add Watermark", desc: "Add text or image watermark", icon: "💧", href: "#", active: false },

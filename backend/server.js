@@ -11,13 +11,15 @@ app.get("/", (req, res) => {
   res.json({
     status: "ok",
     name: "PDFDesk API",
-    version: "1.1.0",
+    version: "1.2.0",
     message: "Server is running"
   });
 });
 
 app.use("/api/merge", require("./routes/merge"));
 app.use("/api/split", require("./routes/split"));
+app.use("/api/rotate", require("./routes/routes_rotate"));
+app.use("/api/compress", require("./routes/routes_compress"));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Merge PDF — PDFDesk</title>
+  <title>Rotate PDF — PDFDesk</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -12,10 +12,10 @@
       <a href="index.html" class="sidebar-logo">PDF<span>Desk</span></a>
       <nav class="sidebar-nav">
         <a href="index.html" class="sidebar-link"><span class="sidebar-icon">🏠</span> Home</a>
-        <a href="merge.html" class="sidebar-link active"><span class="sidebar-icon">🧩</span> Merge PDF</a>
+        <a href="merge.html" class="sidebar-link"><span class="sidebar-icon">🧩</span> Merge PDF</a>
         <a href="split.html" class="sidebar-link"><span class="sidebar-icon">✂️</span> Split PDF</a>
         <a href="compress.html" class="sidebar-link"><span class="sidebar-icon">🗜️</span> Compress</a>
-        <a href="rotate.html" class="sidebar-link"><span class="sidebar-icon">🔄</span> Rotate</a>
+        <a href="rotate.html" class="sidebar-link active"><span class="sidebar-icon">🔄</span> Rotate</a>
         <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">🖼️</span> PDF to JPG</a>
         <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">📄</span> JPG to PDF</a>
         <a href="#" class="sidebar-link disabled"><span class="sidebar-icon">💧</span> Watermark</a>
@@ -25,36 +25,40 @@
     </aside>
 
     <div class="tool-layout page-enter">
-      <section class="merge-main" id="mergeMain">
+      <section class="merge-main" id="rotateMain">
+        <!-- Empty state -->
         <div class="dropzone-big" id="dropzone">
           <div class="dropzone-content">
-            <div class="dropzone-icon">📄</div>
-            <h2>Select PDF files to merge</h2>
-            <p>or drag and drop PDFs here</p>
-            <button class="btn btn-primary btn-lg" id="selectBtn">Select PDF files</button>
+            <div class="dropzone-icon">🔄</div>
+            <h2>Select a PDF to rotate</h2>
+            <p>or drag and drop a PDF here</p>
+            <button class="btn btn-primary btn-lg" id="selectBtn">Select PDF file</button>
           </div>
         </div>
-        <div class="thumbs-area" id="thumbsArea" hidden>
-          <div class="thumbs-header">
-            <span id="thumbsCount">0 files</span>
-            <button class="btn-add-more" id="addMoreBtn" title="Add more files">+</button>
-          </div>
-          <div class="thumbs-row" id="thumbsRow"></div>
-        </div>
+
+        <!-- Page grid -->
+        <div class="rotate-grid" id="rotateGrid" hidden></div>
       </section>
 
       <aside class="merge-side">
-        <h1>Merge PDF</h1>
-        <p class="side-desc">Combine multiple PDF files into a single document in the order you want.</p>
-        <div class="side-tip"><strong>Tip:</strong> Drag and drop the files to change their order.</div>
+        <h1>Rotate PDF</h1>
+        <p class="side-desc">Rotate individual pages or the whole document, then download.</p>
+
+        <div id="rotateControls" hidden>
+          <div class="rotate-side-actions">
+            <button class="btn-rotate-all" id="rotateAllLeftBtn">↺ Rotate All Left</button>
+            <button class="btn-rotate-all" id="rotateAllRightBtn">↻ Rotate All Right</button>
+          </div>
+        </div>
+
         <div class="side-status" id="status"></div>
-        <button class="btn btn-primary btn-merge" id="mergeBtn" disabled>Merge PDF →</button>
+        <button class="btn btn-primary btn-merge" id="rotateBtn" disabled>Rotate PDF →</button>
       </aside>
     </div>
   </div>
 
-  <input type="file" id="fileInput" accept="application/pdf" multiple hidden />
+  <input type="file" id="fileInput" accept="application/pdf" hidden />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="js/merge.js"></script>
+  <script src="js/js_rotate.js"></script>
 </body>
 </html>
